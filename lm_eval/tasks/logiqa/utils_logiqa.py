@@ -20,5 +20,4 @@ def doc_to_text(doc) -> str:
 
 
 def doc_to_target(doc) -> int:
-    choices = ["a", "b", "c", "d"]
-    return choices.index(doc["label"].strip())
+    return doc['final_answer']

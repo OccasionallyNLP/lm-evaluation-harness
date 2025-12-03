@@ -5,6 +5,9 @@ dataset_path: super_glue
 dataset_name: multirc
 output_type: multiple_choice
 training_split: train
+fewshot_split: train
+fewshot_config:
+  sampler: first_n
 validation_split: validation
 doc_to_text: "{{paragraph}}\nQuestion: {{question}}\nAnswer:"
 doc_to_target: label

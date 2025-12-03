@@ -3,6 +3,9 @@ dataset_path: winogrande
 dataset_name: winogrande_xl
 output_type: multiple_choice
 training_split: train
+fewshot_split: train
+fewshot_config:
+  sampler: first_n
 validation_split: validation
 doc_to_text: !function preprocess_winogrande.doc_to_text
 doc_to_target: !function preprocess_winogrande.doc_to_target

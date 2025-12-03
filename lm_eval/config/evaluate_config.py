@@ -358,10 +358,14 @@ class EvaluatorConfig:
         )
 
         # Normalize tasks to a list
+        # XXX
+        if isinstance(self.tasks, list) and len(self.tasks)==1:
+            if ',' in self.tasks[0]:
+                self.tasks = self.tasks[0].split(',')
         task_list = (
             self.tasks.split(",") if isinstance(self.tasks, str) else list(self.tasks)
         )
-
+        print(task_list)
         # Handle directory input
         if len(task_list) == 1 and Path(task_list[0]).is_dir():
             task_names = []

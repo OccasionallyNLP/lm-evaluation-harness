@@ -1,0 +1,1 @@
+sh ./execution_scripts/small_model_evaluation.sh models/qwen3-0.6B results/qwen3-0.6B 0
