@@ -40,12 +40,18 @@ def download_json(url) -> dict:
     data = response.json()
     return data
 
+@cache
+def read_squad_local(
+    url="lm-evaluation-harness/datasets/dev-v2.0.json",
+) -> tuple[list[dict], list[str]]:
+    data = json.load(open(url))
+    return data
 
 @cache
 def read_squad(
-    url="https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json",
+    url="lm-evaluation-harness/datasets/dev-v2.0.json",
 ) -> tuple[list[dict], list[str]]:
-    data = download_json(url)
+    data = read_squad_local(url)
     total_docs = [p["context"] for d in data["data"] for p in d["paragraphs"]]
     total_docs = sorted(list(set(total_docs)))
     total_docs_dict = {c: idx for idx, c in enumerate(total_docs)}
@@ -73,10 +79,10 @@ def read_squad(
 
 
 @cache
-def read_hotpotqa(
-    url="http://curtis.ml.cmu.edu/datasets/hotpot/hotpot_dev_distractor_v1.json",
+def read_hotpotqa_local(
+    url="lm-evaluation-harness/datasets/hotpot_dev_distractor_v1.json",
 ) -> tuple[list[dict], list[str]]:
-    data = download_json(url)
+    data = read_squad_local(url)
     total_docs = [f"{t}\n{''.join(p)}" for d in data for t, p in d["context"]]
     total_docs = sorted(list(set(total_docs)))
     total_docs_dict = {c: idx for idx, c in enumerate(total_docs)}
