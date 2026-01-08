@@ -40,19 +40,49 @@ def download_json(url) -> dict:
     response.raise_for_status()
     data = response.json()
     return data
+@cache
+def download_json_local(url) -> dict:
+    data = json.load(open(url))
+    return data
 
 @cache
-def read_squad_local(
-    url="./datasets/dev-v2.0.json",
+def read_squad(
+    url="https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json",
 ) -> tuple[list[dict], list[str]]:
-    data = datasets.load_dataset("json", data_files=url, split="train")
-    return data
+    try:
+        data = download_json(url)
+    except:
+        data = download_json_local(url)
+    total_docs = [p["context"] for d in data["data"] for p in d["paragraphs"]]
+    total_docs = sorted(list(set(total_docs)))
+    total_docs_dict = {c: idx for idx, c in enumerate(total_docs)}
+
+    total_qas = []
+    for d in data["data"]:
+        more_docs = [total_docs_dict[p["context"]] for p in d["paragraphs"]]
+        for p in d["paragraphs"]:
+            for qas in p["qas"]:
+                if not qas["is_impossible"]:
+                    total_qas.append(
+                        {
+                            "query": qas["question"],
+                            "outputs": [a["text"] for a in qas["answers"]],
+                            "context": [total_docs_dict[p["context"]]],
+                            "more_context": [
+                                idx
+                                for idx in more_docs
+                                if idx != total_docs_dict[p["context"]]
+                            ],
+                        }
+                    )
+
+    return total_qas, total_docs
 
 @cache
 def read_hotpotqa_local(
     url="./datasets/hotpot_dev_distractor_v1.json",
 ) -> tuple[list[dict], list[str]]:
-    data = read_squad_local(url)
+    data = download_json_local(url)
     total_docs = [f"{t}\n{''.join(p)}" for d in data for t, p in d["context"]]
     total_docs = sorted(list(set(total_docs)))
     total_docs_dict = {c: idx for idx, c in enumerate(total_docs)}
@@ -193,7 +223,7 @@ def get_dataset(pretrained, docs, qas, max_seq_length=None, **kwargs) -> list[di
 def get_qa_dataset(ds, **kwargs) -> dict[str, datasets.Dataset]:
     pretrained = kwargs.get("tokenizer", kwargs.get("pretrained", {}))
     if ds == "squad":
-        qas, docs = read_squad_local()
+        qas, docs = read_squad()
     else:
         qas, docs = read_hotpotqa_local()
     df = (
