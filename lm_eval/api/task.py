@@ -234,6 +234,7 @@ class Task(abc.ABC):
             - `datasets.DownloadMode.FORCE_REDOWNLOAD`
                 Fresh download and fresh dataset.
         """
+        print(data_dir)
         self.download(data_dir, cache_dir, download_mode)
         self._training_docs: list | None = None
         self._fewshot_docs: list | None = None

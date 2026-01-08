@@ -4,7 +4,7 @@ OUTPUT_PATH=$2
 #export CUDA_VISIBLE_DEVICES=0,1,2,3,4,5,6,7
 lm_eval --model vllm \
     --model_args "pretrained=${MODEL_NAME},tensor_parallel_size=1,dtype=auto,gpu_memory_utilization=0.8,max_model_len=2048" \
-    --tasks ruler \
+    --tasks longbench2 \
     --batch_size auto \
     --output_path "$OUTPUT_PATH" \
     --limit 10 \
