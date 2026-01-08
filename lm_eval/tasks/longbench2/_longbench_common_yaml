@@ -1,0 +1,37 @@
+dataset_path: parquet
+dataset_name: null
+dataset_kwargs:
+data_files:
+    train:
+    # 위 list를 아래에 넣어줘
+      - datasets/longbench_v2/data/academic_multi.parquet
+      - datasets/longbench_v2/data/academic_single.parquet
+      - datasets/longbench_v2/data/agent_history_qa.parquet
+      - datasets/longbench_v2/data/code_repo_qa.parquet
+      - datasets/longbench_v2/data/detective.parquet
+      - datasets/longbench_v2/data/dialogue_history_qa.parquet
+      - datasets/longbench_v2/data/event_ordering.parquet
+      - datasets/longbench_v2/data/financial_multi.parquet
+      - datasets/longbench_v2/data/financial_single.parquet
+      - datasets/longbench_v2/data/government_multi.parquet
+      - datasets/longbench_v2/data/government_single.parquet
+      - datasets/longbench_v2/data/graph_reasoning.parquet
+      - datasets/longbench_v2/data/legal_multi.parquet
+      - datasets/longbench_v2/data/legal_single.parquet
+      - datasets/longbench_v2/data/literary.parquet
+      - datasets/longbench_v2/data/manyshot_learning.parquet
+      - datasets/longbench_v2/data/multinews.parquet
+      - datasets/longbench_v2/data/new_language_translation.parquet
+      - datasets/longbench_v2/data/table_qa.parquet
+      - datasets/longbench_v2/data/user_guide_qa.parquet
+test_split: train
+output_type: multiple_choice
+doc_to_text: "Please read the following text and answer the question below.\n\n<text>\n{{context}}\n</text>\n\nWhat is the correct answer to this question: {{question.strip()}}\nChoices:\n(A) {{choices[0]}}\n(B) {{choices[1]}}\n(C) {{choices[2]}}\n(D) {{choices[3]}}\n\nAnswer:"
+doc_to_choice: ["A", "B", "C", "D"]
+doc_to_target: answer
+metric_list:
+  - metric: acc
+    aggregation: mean
+    higher_is_better: true
+metadata:
+  version: 0.0

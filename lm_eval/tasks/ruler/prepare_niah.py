@@ -57,7 +57,7 @@ WORDS = sorted(list(set(words)))
 # Positions
 DEPTHS = list(np.round(np.linspace(0, 100, num=40, endpoint=True)).astype(int))
 
-NLTK_MIN_VERSION = "3.9.1"
+NLTK_MIN_VERSION = "3.8.1"
 RANK = os.environ.get("LOCAL_RANK", "0")
 
 
@@ -332,7 +332,8 @@ def get_haystack(
 ) -> Union[list[str], str]:
     NEEDLE = "One of the special magic {type_needle_v} for {key} is: {value}."
     if type_haystack == "essay":
-        essay = datasets.load_dataset("baber/paul_graham_essays", split="train")["text"]
+        # XXX
+        essay = datasets.load_dataset("json",data_files="datasets/paul_graham_essays.json", split="train")["text"]
         essay = " ".join(essay)
         haystack = re.sub(r"\s+", " ", essay).split(" ")
     elif type_haystack == "repeat":

@@ -76,7 +76,7 @@ multilingual = ["nagisa>=0.2.7", "jieba>=0.42.1", "pycountry"]
 #promptsource = [
 #  "promptsource>=0.2.3 ; python_version <= '3.12'",
 #]
-ruler = ["nltk", "wonderwords", "scipy"]
+ruler = ["nltk>=3.9.1", "wonderwords", "scipy"]
 sentencepiece = ["sentencepiece>=0.1.98"]
 discrim_eval = ["statsmodels==0.14.4"]
 unitxt = ["unitxt==1.22.0"]

@@ -1,1 +1,0 @@
-sh ./execution_scripts/ruler.sh models/qwen3-0.6B results/qwen3-0.6B

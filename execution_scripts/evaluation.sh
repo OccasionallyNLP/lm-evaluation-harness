@@ -1,0 +1,1 @@
+sh ./execution_scripts/long_eval.sh models/qwen3-0.6B results/qwen3-0.6B

@@ -223,9 +223,9 @@ def get_dataset(pretrained, docs, qas, max_seq_length=None, **kwargs) -> list[di
 def get_qa_dataset(ds, **kwargs) -> dict[str, datasets.Dataset]:
     pretrained = kwargs.get("tokenizer", kwargs.get("pretrained", {}))
     if ds == "squad":
-        qas, docs = read_squad()
+        qas, docs = read_squad_local()
     else:
-        qas, docs = read_hotpotqa()
+        qas, docs = read_hotpotqa_local()
     df = (
         get_dataset(pretrained=pretrained, docs=docs, qas=qas, max_seq_length=seq)
         for seq in kwargs.pop("max_seq_lengths", DEFAULT_SEQ_LENGTHS)
