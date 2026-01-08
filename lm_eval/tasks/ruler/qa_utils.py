@@ -18,6 +18,7 @@ import random
 from functools import cache
 
 import datasets
+import json
 import requests
 from tqdm import tqdm
 
@@ -42,45 +43,14 @@ def download_json(url) -> dict:
 
 @cache
 def read_squad_local(
-    url="lm-evaluation-harness/datasets/dev-v2.0.json",
+    url="./datasets/dev-v2.0.json",
 ) -> tuple[list[dict], list[str]]:
-    data = json.load(open(url))
+    data = datasets.load_dataset("json", data_files=url, split="train")
     return data
 
 @cache
-def read_squad(
-    url="lm-evaluation-harness/datasets/dev-v2.0.json",
-) -> tuple[list[dict], list[str]]:
-    data = read_squad_local(url)
-    total_docs = [p["context"] for d in data["data"] for p in d["paragraphs"]]
-    total_docs = sorted(list(set(total_docs)))
-    total_docs_dict = {c: idx for idx, c in enumerate(total_docs)}
-
-    total_qas = []
-    for d in data["data"]:
-        more_docs = [total_docs_dict[p["context"]] for p in d["paragraphs"]]
-        for p in d["paragraphs"]:
-            for qas in p["qas"]:
-                if not qas["is_impossible"]:
-                    total_qas.append(
-                        {
-                            "query": qas["question"],
-                            "outputs": [a["text"] for a in qas["answers"]],
-                            "context": [total_docs_dict[p["context"]]],
-                            "more_context": [
-                                idx
-                                for idx in more_docs
-                                if idx != total_docs_dict[p["context"]]
-                            ],
-                        }
-                    )
-
-    return total_qas, total_docs
-
-
-@cache
 def read_hotpotqa_local(
-    url="lm-evaluation-harness/datasets/hotpot_dev_distractor_v1.json",
+    url="./datasets/hotpot_dev_distractor_v1.json",
 ) -> tuple[list[dict], list[str]]:
     data = read_squad_local(url)
     total_docs = [f"{t}\n{''.join(p)}" for d in data for t, p in d["context"]]
